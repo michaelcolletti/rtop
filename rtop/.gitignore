@@ -1,0 +1,71 @@
+# Rust build artifacts
+/target/
+**/*.rs.bk
+*.o
+*.so
+*.dylib
+*.a
+*.rlib
+
+# Debug artifacts
+*.pdb
+
+# IDE / Editor specific files
+/.idea/
+/.vscode/
+/.vs/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Docker
+.dockerignore
+*.env
+.env.*
+!.env.example
+
+# Build artifacts
+/build/
+/dist/
+
+# Makefile artifacts
+.make/
+.makerc
+*.mk.cache
+
+# Dependency directories
+/vendor/
+
+# Log files
+*.log
+log/
+logs/
+
+# Temporary files
+*.tmp
+.tmp/
+tmp/
+
+# Environment variables
+.env
+
+# Generated documentation
+/doc/
+/docs/target/
+
+# Local configuration files
+*.local
+config.local.*
+
+# Benchmark results
+/benches/target/
+
+# Coverage reports
+/coverage/
+*.lcov
+*.gcda
+*.gcno
+
+# Cargo lock file - uncomment this if you want to ignore it
+# Cargo.lock

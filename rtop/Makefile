@@ -1,12 +1,12 @@
 build:
-    cargo build --release
+	cargo build --release
 test:
-    cargo test   
+	cargo test   
 check:
-    cargo check
+	cargo check
   
 fmt:
-    cargo fmt
+	cargo fmt
   
 clean:
-    rm -rf target
+	rm -rf target
