@@ -23,7 +23,7 @@ jobs:
           toolchain: stable
 
       - name: Build
-        run: cargo build --release
+        run: cd rtop;cargo build --release
 
       - name: Run tests
         run: cargo test
