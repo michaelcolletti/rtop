@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install Rust
-        uses: rust-lang/rustup-action@v1
+        uses: rust-lang/rustup-action@v2
         with:
           toolchain: stable
 

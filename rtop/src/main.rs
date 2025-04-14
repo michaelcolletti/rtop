@@ -36,7 +36,6 @@ use tui::{
 
 struct App {
     system: System,
-    scroll_offset: usize,
     selected_process: Option<usize>,
 }
 
@@ -44,11 +43,9 @@ impl App {
     fn new() -> App {
         App {
             system: System::new_all(),
-            scroll_offset: 0,
             selected_process: None,
         }
     }
-
     fn update(&mut self) {
         self.system.refresh_all();
     }
