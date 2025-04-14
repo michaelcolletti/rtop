@@ -24,22 +24,31 @@ jobs:
 
       - name: Build
         run: cargo build --release
-
+        working-directory: ./rtop
+      
       - name: Run tests
         run: cargo test
+        working-directory: ./rtop
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3    
+        
+      - name: Upload artifact
+        if: ${{ github.event_name == 'push' }}
+        run: cargo test --release 
+        working-directory: ./rtop 
 
   deploy:
     needs: build
     strategy:
-      matrix:
-        os: [macos-latest, windows-latest]
+        matrix:
+          os: [macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Install Rust
-        uses: rust-lang/rustup@v1
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
 
