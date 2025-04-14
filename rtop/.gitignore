@@ -49,6 +49,9 @@ tmp/
 
 # Environment variables
 .env
+*.env
+*.env.*
+!.env.example
 
 # Generated documentation
 /doc/
