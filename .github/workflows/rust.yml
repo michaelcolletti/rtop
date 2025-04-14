@@ -1,22 +1,61 @@
-name: Rust
+# .github/workflows/deploy.yml
+name: Deploy
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-env:
-  CARGO_TERM_COLOR: always
+    branches:
+      - main
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up working directory
+        run: echo "Working directory already set by default"
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Build
+        run: cargo build --release
+
+      - name: Run tests
+        run: cargo test
+
+  deploy:
+    needs: build
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Rust
+        uses: rust-lang/rustup@v1
+        with:
+          toolchain: stable
+
+      - name: Build
+        run: cargo build --release
+
+      - name: Upload Windows artifact
+        if: ${{ matrix.os == 'windows-latest' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: rtop-${{ matrix.os }}
+          path: target/release/rtop.exe
+
+      - name: Upload macOS artifact
+        if: ${{ matrix.os == 'macos-latest' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: rtop-${{ matrix.os }}
+          path: target/release/rtop
