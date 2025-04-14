@@ -14,6 +14,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Set up working directory
+        run: cd rtop
+
       - name: Install Rust
         uses: rust-lang/rustup@v1
         with:
