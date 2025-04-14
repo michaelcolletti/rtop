@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install Rust
-        uses: rust-lang/rustup@v2
+        uses: rust-lang/rustup@v1
         with:
           toolchain: stable
 
@@ -44,15 +44,15 @@ jobs:
         run: cargo build --release
 
       - name: Upload Windows artifact
+        if: ${{ matrix.os == 'windows-latest' }}
         uses: actions/upload-artifact@v3
         with:
           name: rtop-${{ matrix.os }}
           path: target/release/rtop.exe
-        if: matrix.os == 'windows-latest'
-        
+
       - name: Upload macOS artifact
+        if: ${{ matrix.os == 'macos-latest' }}
         uses: actions/upload-artifact@v3
         with:
           name: rtop-${{ matrix.os }}
           path: target/release/rtop
-        if: matrix.os == 'macos-latest'
