@@ -13,10 +13,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Format code
-        run: cargo fmt -- --write-jar
+        run: cargo fmt -- --write-jar --path rtop
 
       - name: Check formatting
-        run: cargo check -- --write-jar
+        run: cargo check -- --write-jar --path rtop
 
   build:
     runs-on: ubuntu-latest
@@ -25,10 +25,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build code
-        run: cargo build --release
+        run: cargo build --release --path rtop
 
       - name: Check build
-        run: cargo check --release -- --write-jar
+        run: cargo check --release -- --write-jar --path rtop
 
   benchmark:
     runs-on: ubuntu-latest
@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Benchmark code
-        run: cargo bench --release -- --write-jar
+        run: cargo bench --release -- --write-jar --path rtop
 
   test:
     runs-on: ubuntu-latest
@@ -46,7 +46,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run tests
-        run: cargo test --release -- --write-jar
+        run: cargo test --release -- --write-jar --path rtop
 
   publish:
     runs-on: ubuntu-latest
@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Publish package
-        run: cargo publish --package rtop
+        run: cargo publish --package rtop --path rtop
 
       - name: Create release
         run: |
