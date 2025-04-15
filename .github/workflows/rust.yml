@@ -13,10 +13,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Format code
-        run: cargo fmt -- --write-jar --path rtop
+        run: cargo fmt --manifest-path rtop/Cargo.toml
 
       - name: Check formatting
-        run: cargo check -- --write-jar --path rtop
+        run: cargo check --manifest-path rtop/Cargo.toml
 
   build:
     runs-on: ubuntu-latest
@@ -25,10 +25,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build code
-        run: cargo build --release --path rtop
+        run: cargo build --release --manifest-path rtop/Cargo.toml
 
       - name: Check build
-        run: cargo check --release -- --write-jar --path rtop
+        run: cargo check --release --manifest-path rtop/Cargo.toml
 
   benchmark:
     runs-on: ubuntu-latest
@@ -37,7 +37,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Benchmark code
-        run: cargo bench --release -- --write-jar --path rtop
+        run: cargo bench --release --manifest-path rtop/Cargo.toml
 
   test:
     runs-on: ubuntu-latest
@@ -46,7 +46,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Run tests
-        run: cargo test --release -- --write-jar --path rtop
+        run: cargo test --release --manifest-path rtop/Cargo.toml
 
   publish:
     runs-on: ubuntu-latest
@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Publish package
-        run: cargo publish --package rtop --path rtop
+        run: cargo publish --package rtop --manifest-path rtop/Cargo.toml
 
       - name: Create release
         run: |
