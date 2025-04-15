@@ -1,22 +1,75 @@
-name: Rust
+name: Rust Action
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-env:
-  CARGO_TERM_COLOR: always
+    branches:
+      - main
 
 jobs:
-  build:
-
+  format:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Format code
+        run: cargo fmt -- --write-jar
+
+      - name: Check formatting
+        run: cargo check -- --write-jar
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build code
+        run: cargo build --release
+
+      - name: Check build
+        run: cargo check --release -- --write-jar
+
+  benchmark:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Benchmark code
+        run: cargo bench --release -- --write-jar
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run tests
+        run: cargo test --release -- --write-jar
+
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Publish package
+        run: cargo publish --package rtop
+
+      - name: Create release
+        run: |
+          echo "Release title: Rust Action for rtop" >>release.txt
+          echo "Release description: This is a test release for the Rust Action." >> release.txt
+          echo "Release tag: v1.0.0" >> release.txt
+          echo "Release notes:" >> release.txt
+          echo "" >> release.txt
+          echo "$(cat release.txt)" >> release.md
+
+      - name: Create release
+        uses: actions/create-release@v1
+        with:
+          tag_name: v1.0.0
+          release_note: ${{ secrets.RELEASE_NOTES }}
+          draft: false
+          tag_prefix: v
