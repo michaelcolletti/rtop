@@ -68,17 +68,15 @@ struct App {
     system: System,
     selected_process: Option<usize>,
     sort_by: SortBy,
-    refresh_rate: Duration,
     state: AppState,
 }
 
 impl App {
-    fn new(refresh_rate: Duration) -> App {
+    fn new() -> App {
         App {
             system: System::new_all(),
             selected_process: None,
             sort_by: SortBy::Cpu,
-            refresh_rate,
             state: AppState::Main,
         }
     }
@@ -122,7 +120,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
 
-    let app = App::new(refresh_rate);
+    let app = App::new();
     let res = run_app(&mut terminal, app, refresh_rate);
 
     disable_raw_mode()?;
@@ -353,7 +351,7 @@ mod tests {
     use super::*;
     #[test]
     fn test_app_update() {
-        let mut app = App::new(Duration::from_millis(250));
+        let mut app = App::new();
         let initial_process_count = app.system.processes().len();
         app.update();
         assert!(app.system.processes().len() >= initial_process_count);
