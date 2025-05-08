@@ -1,13 +1,13 @@
 # RTop for Mac and Windows
 
-A Rust-based system monitor inspired by htop, designed to run on macOS and Windows.
+A Rust-based system monitor inspired by htop and top, designed to run on macOS and Windows.
 
 ## Features
 
 - CPU and memory usage display.
 - Process list with CPU and memory consumption.
 - Interactive process selection.
-- Cross-platform support (macOS and Windows).
+- Cross-platform support (macOS and Windows coming soon).
 
 ## Installation
 
