@@ -79,7 +79,6 @@ jobs:
         uses: actions/create-release@v1
         with:
           tag_name: v1.0.0
-          token: ${{ secrets.GITHUB_TOKEN }}
-          release_note: release.md
+          release_note: ${{ secrets.RELEASE_NOTES }}
           draft: false
           tag_prefix: v
