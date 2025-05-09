@@ -36,15 +36,28 @@ jobs:
         run: cargo check --release --manifest-path rtop/Cargo.toml
 
   benchmark:
+    name: Run Rust Benchmark
     runs-on: ubuntu-latest
     env:
         PLATFORM: ${{ matrix.platform }}
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      # Checkout the code and run the benchmarks using cargo.
+      - uses: actions/checkout@v2
+      - run: rustup toolchain update nightly && rustup default nightly
+      - name: Run benchmark
+        run: cargo bench | tee output.txt
 
-      - name: Benchmark code
-        run: cargo bench 
+      # Push the results using the benchmark action.
+      - name: Store Benchmark Result
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          name: Rust Benchmark
+          tool: 'cargo'
+          output-file-path: output.txt
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
+          alert-threshold: '200%'
+          fail-on-alert: true
 
   test:
     runs-on: ubuntu-latest
@@ -56,15 +69,6 @@ jobs:
 
       - name: Run tests
         run: cargo test --release --manifest-path rtop/Cargo.toml
-
-  # publish:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
-
-  #     - name: Publish package
-  #       run: cargo publish --package rtop --manifest-path rtop/Cargo.toml
 
       - name: Create release
         run: |
