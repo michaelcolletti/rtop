@@ -70,14 +70,22 @@ jobs:
       - name: Run tests
         run: cargo test --release --manifest-path rtop/Cargo.toml
 
-      - name: Create release
-        run: |
-          echo "Release title: Rust Action for rtop" >>release.txt
-          echo "Release description: This is a test release for the Rust Action." >> release.txt
-          echo "Release tag: v1.0.0" >> release.txt
-          echo "Release notes:" >> release.txt
-          echo "" >> release.txt
-          echo "$(cat release.txt)" >> release.md
+      - name: Create Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: Description of your release
+          token: ${{ secrets.PAT }}    
+
+      # - name: Create release
+      #   run: |
+      #     echo "Release title: Rust Action for rtop" >>release.txt
+      #     echo "Release description: This is a test release for the Rust Action." >> release.txt
+      #     echo "Release tag: v1.0.0" >> release.txt
+      #     echo "Release notes:" >> release.txt
+      #     echo "" >> release.txt
+      #     echo "$(cat release.txt)" >> release.md
 
       - name: Create release
         uses: actions/create-release@v1
