@@ -4,12 +4,13 @@ on:
   push:
     branches:
       - main
+
 jobs:
   format:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         platform: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -21,9 +22,10 @@ jobs:
         run: cargo check --manifest-path rtop/Cargo.toml
 
   build:
-    runs-on: ubuntu-latest
-    env:
-        PLATFORM: ${{ matrix.platform }}
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -34,62 +36,28 @@ jobs:
       - name: Check build
         run: cargo check --release --manifest-path rtop/Cargo.toml
 
-  # benchmark:
-  #   name: Run Rust Benchmark
-  #   runs-on: ubuntu-latest
-  #   env:
-  #       PLATFORM: ${{ matrix.platform }}
-  #   steps:
-  #     # Checkout the code and run the benchmarks using cargo.
-  #     - uses: actions/checkout@v2
-  #     - run: rustup toolchain update nightly && rustup default nightly
-  #     - name: Run benchmark
-  #       run: cargo bench --manifest-path rtop/Cargo.toml   | tee output.txt
-
-  #     # Push the results using the benchmark action.
-  #     - name: Store Benchmark Result
-  #       uses: benchmark-action/github-action-benchmark@v1
-  #       with:
-  #         name: Rust Benchmark
-  #         tool: 'cargo'
-  #         output-file-path: output.txt
-  #         github-token: ${{ secrets.GITHUB_TOKEN }}
-  #         auto-push: true
-  #         alert-threshold: '200%'
-  #         fail-on-alert: false
-
   test:
-    runs-on: ubuntu-latest
-    env:
-        PLATFORM: ${{ matrix.platform }}
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Run tests
         run: cargo test --release --manifest-path rtop/Cargo.toml
-  
-  release:    
+
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Create Release
         uses: actions/create-release@v1
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           body: Description of your release
-          token: ${{ secrets.PAT }}    
-
-      # - name: Create release
-      #   run: |
-      #     echo "Release title: Rust Action for rtop" >>release.txt
-      #     echo "Release description: This is a test release for the Rust Action." >> release.txt
-      #     echo "Release tag: v1.0.0" >> release.txt
-      #     echo "Release notes:" >> release.txt
-      #     echo "" >> release.txt
-      #     echo "$(cat release.txt)" >> release.md
-
-      - name: Create release
-        uses: actions/create-release@v1
-        with:
-          tag_name: ${{ github.ref }}
-          release_note: ${{ secrets.RELEASE_NOTES }}
-          draft: false
+          token: ${{ secrets.PAT }}
