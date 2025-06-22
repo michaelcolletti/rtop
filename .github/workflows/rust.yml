@@ -71,7 +71,8 @@ jobs:
 
       - name: Run tests
         run: cargo test --release --manifest-path rtop/Cargo.toml
-
+  
+  release:    
       - name: Create Release
         uses: actions/create-release@v1
         with:
