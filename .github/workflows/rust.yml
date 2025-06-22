@@ -59,6 +59,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: v1.0.0                   # <-- Use your actual tag name
+          release_name: Release v1.0.0
           body: Rusted release of HTOP for platforms
+          draft: false
+          prerelease: false
